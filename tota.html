@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Envelope</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000080; /* fundo igual da imagem */
+  font-family: sans-serif;
+}
+
+/* ENVELOPE */
+.envelope {
+  width: 380px;
+  height: 250px;
+  position: relative;
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+/* BASE */
+.base {
+  width: 100%;
+  height: 100%;
+  background: #eaeaea;
+  border-radius: 0 0 30px 30px;
+  position: absolute;
+  box-shadow: 0 15px 25px rgba(0,0,0,0.25);
+  z-index: 1;
+}
+
+/* ABA SUPERIOR ARREDONDADA */
+.flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: #e0e0e0;
+  border-radius: 0 0 180px 180px;
+
+  transform-origin: top;
+  transition: 1s;
+  z-index: 3;
+
+  box-shadow: inset 0 10px 15px rgba(0,0,0,0.15);
+}
+
+/* ABRIR */
+.envelope.open .flap {
+  transform: rotateX(180deg);
+}
+
+/* CARD */
+.card {
+  position: absolute;
+  top: 50px;
+  left: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  transform: translateY(60px);
+  opacity: 0;
+  transition: 1s;
+  z-index: 2;
+}
+
+.envelope.open .card {
+  transform: translateY(-60px);
+  opacity: 1;
+}
+
+/* TEXTO */
+.card h1 {
+  color: #d6336c;
+}
+
+.card p {
+  color: #444;
+}
+
+/* IMAGENS */
+.card img {
+  width: 100%;
+  max-width: 240px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+/* TEXTO ANIMADO */
+.mensagem {
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.envelope.open .mensagem {
+  animation: aparecer 1.5s forwards;
+  animation-delay: 0.8s;
+}
+
+@keyframes aparecer {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="envelope" onclick="abrirEnvelope(this)">
+  <div class="base"></div>
+  <div class="flap"></div>
+
+  <div class="card">
+    <h1>Feliz Aniversário!</h1>
+
+    <p>Que seu dia seja cheio de alegria, amor e muitas surpresas boas!</p>
+
+    <img src="https://i.ibb.co/zTCdQWjw/image.png">
+    <img src="https://i.ibb.co/Q33SFvhs/image.png">
+    <img src="https://i.ibb.co/Hfynwxjx/image.png">
+    <img src="https://i.ibb.co/1G3mm3F0/image.png">
+    <img src="https://i.ibb.co/rGMtTrMQ/image.png">
+    <img src="https://i.ibb.co/mVv1JcBL/image.png">
+
+    <p class="mensagem">
+      Tia, admiro muito a sua força e tudo o que você conquistou com seu esforço e dedicação, mesmo diante das dificuldades. Você é prova de que com garra a gente chega longe.
+      E eu gosto de como você canta sem se preocupar muito, só pelo prazer e pela diversão — isso deixa tudo mais leve e mostra o quanto você sabe aproveitar os momentos simples.
+      Tenho muito orgulho de você 💛
+    </p>
+  </div>
+</div>
+<audio id="parabensMusic">
+  <source src="Jon Secada - Just Another Day.mp3" type="audio/mpeg">
+ 
+</audio>
+
+<script>
+function abrirEnvelope(el) {
+  const aberto = el.classList.toggle('open');
+  const audio = document.getElementById('parabensMusic');
+
+  if (aberto) {
+    audio.currentTime = 0;
+    audio.play().catch(()=>{});
+    fogos();
+  } else {
+    audio.pause();
+  }
+}
+
+function fogos() {
+  const cores = ['#FF3F8E','#04C2C9','#FFC700','#FF6F61','#9B59B6'];
+
+  for(let i=0;i<20;i++){
+    let f = document.createElement('div');
+    f.className = 'firework';
+    f.style.background = cores[i%cores.length];
+    f.style.width = f.style.height = (Math.random()*10+6)+'px';
+    f.style.left = Math.random()*window.innerWidth+'px';
+    f.style.top = Math.random()*window.innerHeight*0.6+'px';
+
+    document.body.appendChild(f);
+
+    f.animate([
+      {transform:'scale(1)',opacity:1},
+      {transform:'scale(20)',opacity:0}
+    ],{duration:1200});
+
+    setTimeout(()=>f.remove(),1200);
+  }
+}
+</script>
+
+
+</body>
+</html>
